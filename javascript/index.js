@@ -107,7 +107,7 @@ if (heroSection) {
   });
   
   heroSection.addEventListener('mouseleave', () => {
-    slideInterval = setInterval(nextSlide, 3000);
+    slideInterval = setInterval(nextSlide, 1500);
   });
 }
 

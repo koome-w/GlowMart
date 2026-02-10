@@ -89,30 +89,53 @@ if (overlayRight) {
 }
 
 // Form submission handlers
-if (signInForm) {
-  signInForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = signInForm.querySelector('input[type="email"]').value;
-    const password = signInForm.querySelector('input[type="password"]').value;
-    
-    console.log('Sign In:', { email, password });
-    // Add your sign-in logic here
-    alert('Sign In functionality - Email: ' + email);
-  });
-}
+document.getElementById("signInForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-if (signUpForm) {
-  signUpForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = signUpForm.querySelector('input[type="text"]').value;
-    const email = signUpForm.querySelector('input[type="email"]').value;
-    const password = signUpForm.querySelector('input[type="password"]').value;
-    
-    console.log('Sign Up:', { name, email, password });
-    // Add your sign-up logic here
-    alert('Sign Up functionality - Name: ' + name + ', Email: ' + email);
+  const formData = new FormData(e.target);
+
+  const res = await fetch("../php/login.php", {
+    method: "POST",
+    body: formData
   });
-}
+
+  const data = await res.json();
+  console.log(data);
+
+  if (data.status === "success") {
+    window.location.href = "../html/menu.html"; // or dashboard
+  } else {
+    alert(data.message);
+  }
+});
+
+
+
+signUpForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(signUpForm);
+
+  try {
+    const response = await fetch("../php/register.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.status === "success") {
+      togglePanel();
+      signUpForm.reset();
+    } else {
+      alert(result.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
 
 // Social button handlers
 const socialButtons = document.querySelectorAll('.social-btn');

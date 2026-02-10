@@ -1,0 +1,97 @@
+/* Header cart/user/menu */
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            position: relative;
+        }
+        .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+            padding: 2px 6px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Cart items */
+        #cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            align-items: center;
+        }
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #f8f8f8;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-details h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+        .cart-item-details p {
+            margin: 3px 0;
+        }
+        .quantity-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .quantity-container button {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        .remove-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        #cart-total {
+            text-align: right;
+            font-size: 18px;
+            margin: 20px;
+            font-weight: bold;
+        }
+        #checkout-btn {
+            display: block;
+            margin: 10px 20px 30px auto;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        }
