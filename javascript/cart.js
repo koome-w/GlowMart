@@ -159,11 +159,12 @@ async function removeItem(productId) {
     }
 }
 
-// Checkout button (placeholder)
+// Checkout button
 const checkoutBtn = document.getElementById('checkout-btn');
+
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
-        alert('Checkout functionality will be added later!');
+        window.location.href = "../html/checkout.html";
     });
 }
 

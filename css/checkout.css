@@ -1,0 +1,11 @@
+/* Minimal checkout styles following project theme */
+body{font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:#fcfbff;color:#111;margin:0}
+.checkout-container{display:flex;min-height:80vh;align-items:center;justify-content:center;padding:40px}
+.checkout-panel{width:980px;max-width:95%;background:#fff;border-radius:12px;padding:28px;box-shadow:0 8px 30px rgba(16,24,40,.08)}
+.checkout-panel h1{margin:0 0 16px;font-size:24px}
+.cart-summary{border:1px solid #eef2ff;padding:12px;border-radius:8px;margin-bottom:16px}
+.payment-form{display:flex;flex-direction:column;gap:10px}
+.payment-form input{padding:10px;border:1px solid #e6e9f2;border-radius:8px;font-size:16px}
+.pay-btn{background:#7c3aed;color:#fff;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer}
+.pay-btn:disabled{opacity:.6;cursor:not-allowed}
+.status{margin-top:8px;font-size:14px;color:#334155}
