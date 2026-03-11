@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlowMart Admin Dashboard</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">GM</span>
+                <span class="logo-text">GlowMart</span>
+            </div>
+            <div class="sidebar-adminlabel">
+                <span class="admin-label">Admin</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li><a href="#products"><i class="fa fa-box"></i> Products</a></li>
+                <li><a href="#categories"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="#orders"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="#payments"><i class="fa fa-credit-card"></i> Payments</a></li>
+                <li><a href="#feedback"><i class="fa fa-comments"></i> Feedback</a></li>
+                <li><a href="#reports"><i class="fa fa-file"></i> Reports</a></li>
+                <li><a href="#profile"><i class="fa fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="admin-main">
+
+            <!-- HEADER -->
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="admin-header-right">
+                    <div class="admin-info">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <div class="admin-details">
+                            <span class="admin-name">Admin Name</span>
+                            <!--<span class="admin-role">Super Admin</span>-->
+                        </div>
+                        <button class="admin-menu-btn" title="Account Options"><i class="fa fa-ellipsis-v"></i></button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content">
+
+                <!-- ========== 1. DASHBOARD ========== -->
+                <section id="dashboard">
+                    <div class="widgets">
+                        <div class="widget" id="total-sales">
+                            <i class="fa fa-dollar-sign"></i>
+                            <div class="widget-info">
+                                <span>Total Sales</span>
+                                <h3 id="sales-count">0</h3>
+                            </div>
+                        </div>
+                        <div class="widget" id="total-users">
+                            <i class="fa fa-users"></i>
+                            <div class="widget-info">
+                                <span>Users</span>
+                                <h3 id="users-count">0</h3>
+                            </div>
+                        </div>
+                        <div class="widget" id="total-orders">
+                            <i class="fa fa-shopping-cart"></i>
+                            <div class="widget-info">
+                                <span>Orders</span>
+                                <h3 id="orders-count">0</h3>
+                            </div>
+                        </div>
+                        <div class="widget" id="pending-deliveries">
+                            <i class="fa fa-truck"></i>
+                            <div class="widget-info">
+                                <span>Pending Deliveries</span>
+                                <h3 id="pending-count">0</h3>
+                            </div>
+                        </div>
+                        <div class="widget" id="stocks">
+                            <i class="fa fa-boxes"></i>
+                            <div class="widget-info">
+                                <span>Stocks</span>
+                                <h3 id="stocks-count">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-section">
+                        <h3>Product Categories (Quantity)</h3>
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- ========== 2. PRODUCT MANAGEMENT ========== -->
+                <section id="products" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Product Management</h2>
+                        <button class="add-product-btn" id="openAddProductModal"><i class="fa fa-plus"></i> Add Product</button>
+                    </div>
+                    <div class="filter-bar">
+                        <label for="categoryFilter">Filter by Category:</label>
+                        <select id="categoryFilter" class="category-filter"></select>
+                    </div>
+                    <div class="product-table-wrapper">
+                        <table class="product-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Add/Edit Product Modal -->
+                <div class="modal" id="productModal">
+                    <div class="modal-content">
+                        <span class="close-modal" id="closeProductModal">&times;</span>
+                        <h3 id="modalTitle">Add Product</h3>
+                        <form id="productForm" enctype="multipart/form-data">
+                            <input type="hidden" name="product_id" id="product_id">
+                            <div class="form-group">
+                                <label for="product_name">Name</label>
+                                <input type="text" name="product_name" id="product_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product_category">Category</label>
+                                <select name="product_category" id="product_category" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product_price">Price</label>
+                                <input type="number" name="product_price" id="product_price" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product_stock">Stock</label>
+                                <input type="number" name="product_stock" id="product_stock" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product_image">Image</label>
+                                <input type="file" name="product_image" id="product_image" accept="image/*">
+                                <img id="productImagePreview" src="#" alt="Preview" style="display:none;max-width:100px;margin-top:10px;" />
+                            </div>
+                            <!--
+                            <div class="form-group">
+                                <label for="product_description">Description</label>
+                                <textarea name="product_description" id="product_description" rows="3"></textarea>
+                            </div>
+                            -->
+                            <button type="submit" class="modal-submit-btn">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========== 3. CATEGORY MANAGEMENT ========== -->
+                <section id="categories" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Category Management</h2>
+                        <button class="add-category-btn" id="openAddCategoryModal"><i class="fa fa-plus"></i> Add Category</button>
+                    </div>
+                    <div class="category-table-wrapper">
+                        <table class="category-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoryTableBody">
+                                <!-- Categories will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Add/Edit Category Modal -->
+                <div class="modal" id="categoryModal">
+                    <div class="modal-content">
+                        <span class="close-modal" id="closeCategoryModal">&times;</span>
+                        <h3 id="categoryModalTitle">Add Category</h3>
+                        <form id="categoryForm">
+                            <input type="hidden" name="category_id" id="category_id">
+                            <div class="form-group">
+                                <label for="category_name">Name</label>
+                                <input type="text" name="category_name" id="category_name" required>
+                            </div>
+                            <button type="submit" class="modal-submit-btn">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========== 4. ORDER MANAGEMENT ========== -->
+                <section id="orders" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Order Management</h2>
+                    </div>
+                    <div class="order-table-wrapper">
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Order Date</th>
+                                    <!--<th>Delivery Date</th>-->
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderTableBody">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Update Order Status Modal -->
+                <div class="modal" id="orderStatusModal">
+                    <div class="modal-content">
+                        <span class="close-modal" id="closeOrderStatusModal">&times;</span>
+                        <h3>Update Order Status</h3>
+                        <form id="orderStatusForm">
+                            <input type="hidden" name="order_id" id="order_id">
+                            <div class="form-group">
+                                <label for="order_status">Status</label>
+                                <select name="order_status" id="order_status" required>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="delivery_date">Delivery Date</label>
+                                <input type="date" name="delivery_date" id="delivery_date">
+                            </div>
+                            <button type="submit" class="modal-submit-btn">Update</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ========== 5. PAYMENT MANAGEMENT ========== -->
+                <section id="payments" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Payment Management</h2>
+                    </div>
+                    <div class="payment-table-wrapper">
+                        <table class="payment-table">
+                            <thead>
+                                <tr>
+                                    <th>Receipt ID</th>
+                                    <th>Order ID</th>
+                                    <th>Payment Method</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payment Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentTableBody">
+                                <!-- Payments will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ========== 6. FEEDBACK MANAGEMENT ========== -->
+                <section id="feedback" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Feedback Management</h2>
+                    </div>
+                    <div class="feedback-table-wrapper">
+                        <table class="feedback-table">
+                            <thead>
+                                <tr>
+                                    <th>Feedback ID</th>
+                                    <th>User</th>
+                                    <th>Message</th>
+                                    <th>Rating</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbackTableBody">
+                                <!-- Feedbacks will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ========== 7. REPORTS ========== -->
+                <section id="reports" class="admin-section" style="margin-top:40px;">
+                    <div class="section-header">
+                        <h2>Reports</h2>
+                    </div>
+                    <div class="reports-actions" style="margin-bottom:18px;">
+                        <button class="report-btn" id="downloadSalesCSV"><i class="fa fa-download"></i> Download Sales CSV</button>
+                        <button class="report-btn" id="downloadSalesPDF"><i class="fa fa-file-pdf"></i> Download Sales PDF</button>
+                    </div>
+                    <div class="reports-table-wrapper">
+                        <table class="reports-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Order Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody">
+                                <!-- Report data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ========== 8. ADMIN PROFILE ========== -->
+                <section id="profile" class="admin-section" style="margin-top:40px; max-width:500px;">
+                    <div class="section-header">
+                        <h2>Admin Profile</h2>
+                    </div>
+
+                    <!-- Update Profile Form -->
+                    <form id="adminProfileForm">
+                        <div class="form-group">
+                            <label for="admin_full_name">Full Name</label>
+                            <input type="text" name="admin_full_name" id="admin_full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin_email">Email</label>
+                            <input type="email" name="admin_email" id="admin_email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin_phone">Phone</label>
+                            <input type="text" name="admin_phone" id="admin_phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin_profile_pic">Profile Picture</label>
+                            <input type="file" name="admin_profile_pic" id="admin_profile_pic" accept="image/*">
+                            <img id="adminProfilePicPreview" src="#" alt="Preview" style="display:none; max-width:100px; margin-top:10px;" />
+                        </div>
+                        <button type="submit" class="modal-submit-btn">Update Profile</button>
+                    </form>
+
+                    <hr style="margin:32px 0;">
+
+                    <!-- Change Password Form -->
+                    <form id="adminPasswordForm">
+                        <div class="form-group">
+                            <label for="admin_old_password">Old Password</label>
+                            <input type="password" name="admin_old_password" id="admin_old_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin_new_password">New Password</label>
+                            <input type="password" name="admin_new_password" id="admin_new_password" required>
+                        </div>
+                        <button type="submit" class="modal-submit-btn">Change Password</button>
+                    </form>
+                </section>
+
+            </div><!-- end admin-content -->
+        </main><!-- end admin-main -->
+    </div><!-- end admin-wrapper -->
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../javascript/admin.js"></script>
+</body>
+</html>
