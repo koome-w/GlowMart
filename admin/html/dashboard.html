@@ -28,7 +28,6 @@
                 <li><a href="#payments"><i class="fa fa-credit-card"></i> Payments</a></li>
                 <li><a href="#feedback"><i class="fa fa-comments"></i> Feedback</a></li>
                 <li><a href="#reports"><i class="fa fa-file"></i> Reports</a></li>
-                <li><a href="#profile"><i class="fa fa-user"></i> Profile</a></li>
             </ul>
         </aside>
 
@@ -47,7 +46,25 @@
                             <span class="admin-name">Admin Name</span>
                             <!--<span class="admin-role">Super Admin</span>-->
                         </div>
-                        <button class="admin-menu-btn" title="Account Options"><i class="fa fa-ellipsis-v"></i></button>
+                        <button class="admin-menu-btn" title="Account Options" id="adminMenuToggle"><i class="fa fa-ellipsis-v"></i></button>
+                        
+                        <!-- Admin Profile Dropdown Menu -->
+                        <div class="admin-dropdown-menu" id="adminDropdownMenu">
+                            <div class="dropdown-header">My Account</div>
+                            <a href="profile.html" class="dropdown-item" title="View your profile">
+                                <i class="fa fa-user"></i> View Profile
+                            </a>
+                            <a href="edit-profile.html" class="dropdown-item" title="Edit your information">
+                                <i class="fa fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="settings.html" class="dropdown-item" title="Account settings">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../php/logout.php" class="dropdown-item logout-item" title="Sign out">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -220,7 +237,7 @@
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>Order Date</th>
-                                    <!--<th>Delivery Date</th>-->
+                                    <th>Delivery Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -267,12 +284,13 @@
                         <table class="payment-table">
                             <thead>
                                 <tr>
-                                    <th>Receipt ID</th>
+                                    <th>ID</th>
                                     <th>Order ID</th>
-                                    <th>Payment Method</th>
+                                    <th>Phone</th>
                                     <th>Amount</th>
+                                    <th>M-Pesa Receipt</th>
                                     <th>Status</th>
-                                    <th>Payment Date</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="paymentTableBody">
@@ -322,9 +340,10 @@
                                     <th>User</th>
                                     <th>Product</th>
                                     <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th>Price</th>
+                                    <th>Total Amount</th>
                                     <th>Status</th>
-                                    <th>Order Date</th>
+                  1                  <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="reportsTableBody">
@@ -334,50 +353,7 @@
                     </div>
                 </section>
 
-                <!-- ========== 8. ADMIN PROFILE ========== -->
-                <section id="profile" class="admin-section" style="margin-top:40px; max-width:500px;">
-                    <div class="section-header">
-                        <h2>Admin Profile</h2>
-                    </div>
-
-                    <!-- Update Profile Form -->
-                    <form id="adminProfileForm">
-                        <div class="form-group">
-                            <label for="admin_full_name">Full Name</label>
-                            <input type="text" name="admin_full_name" id="admin_full_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="admin_email">Email</label>
-                            <input type="email" name="admin_email" id="admin_email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="admin_phone">Phone</label>
-                            <input type="text" name="admin_phone" id="admin_phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="admin_profile_pic">Profile Picture</label>
-                            <input type="file" name="admin_profile_pic" id="admin_profile_pic" accept="image/*">
-                            <img id="adminProfilePicPreview" src="#" alt="Preview" style="display:none; max-width:100px; margin-top:10px;" />
-                        </div>
-                        <button type="submit" class="modal-submit-btn">Update Profile</button>
-                    </form>
-
-                    <hr style="margin:32px 0;">
-
-                    <!-- Change Password Form -->
-                    <form id="adminPasswordForm">
-                        <div class="form-group">
-                            <label for="admin_old_password">Old Password</label>
-                            <input type="password" name="admin_old_password" id="admin_old_password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="admin_new_password">New Password</label>
-                            <input type="password" name="admin_new_password" id="admin_new_password" required>
-                        </div>
-                        <button type="submit" class="modal-submit-btn">Change Password</button>
-                    </form>
-                </section>
-
+                
             </div><!-- end admin-content -->
         </main><!-- end admin-main -->
     </div><!-- end admin-wrapper -->

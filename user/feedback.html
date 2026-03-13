@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Feedback - GlowMart</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0px auto;
+            padding: 20px;
+        }
+
+        .feedback-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .feedback-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            padding: 40px 30px;
+            color: #fff;
+        }
+
+        .feedback-header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .feedback-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .feedback-content {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            color: #888;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+            border-left: 4px solid;
+        }
+
+        .message.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border-color: #2e7d32;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffcdd2;
+            color: #c62828;
+            border-color: #c62828;
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .char-count {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .feedback-types {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .feedback-header {
+                padding: 30px 20px;
+            }
+
+            .feedback-content {
+                padding: 30px 20px;
+            }
+
+            .feedback-header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="../html/menu.html" class="nav-brand">
+                <div class="logo-icon">GM</div>
+                <span class="logo-text">GlowMart</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="profile.html" class="back-link">← Back to Profile</a>
+
+        <div class="feedback-card">
+            <!-- Header -->
+            <div class="feedback-header">
+                <h1>💬 Send Us Feedback</h1>
+                <p>Help us improve your experience with GlowMart</p>
+            </div>
+
+            <!-- Content -->
+            <div class="feedback-content">
+                <div id="messageAlert" class="message"></div>
+
+                <form id="feedbackForm">
+                    <div class="form-group">
+                        <label for="feedbackType">Feedback Type</label>
+                        <select id="feedbackType" name="feedbackType" required>
+                            <option value="">Select feedback type...</option>
+                            <option value="product_quality">Product Quality</option>
+                            <option value="shipping">Shipping & Delivery</option>
+                            <option value="customer_service">Customer Service</option>
+                            <option value="website">Website & App</option>
+                            <option value="pricing">Pricing & Offers</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input 
+                            type="text" 
+                            id="subject" 
+                            name="subject" 
+                            placeholder="Brief subject of your feedback"
+                            maxlength="100"
+                            required
+                        >
+                        <div class="char-count" id="subjectCount">0/100</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            placeholder="Tell us what you think. We value your opinion!"
+                            maxlength="1000"
+                            required
+                        ></textarea>
+                        <div class="char-count" id="messageCount">0/1000</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email (Optional)</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="We'll use this to follow up if needed"
+                        >
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            📤 Submit Feedback
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="resetForm()">
+                            ✕ Clear
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../javascript/menu.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('feedbackForm');
+            const subjectInput = document.getElementById('subject');
+            const messageInput = document.getElementById('message');
+            const messageAlert = document.getElementById('messageAlert');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Character count for subject
+            subjectInput.addEventListener('input', function() {
+                document.getElementById('subjectCount').textContent = this.value.length + '/100';
+            });
+
+            // Character count for message
+            messageInput.addEventListener('input', function() {
+                document.getElementById('messageCount').textContent = this.value.length + '/1000';
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (messageInput.value.trim().length < 10) {
+                    messageAlert.className = 'message error';
+                    messageAlert.textContent = '✕ Please write at least 10 characters';
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Sending...';
+
+                const formData = new FormData(this);
+
+                fetch('../php/submit_feedback.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        messageAlert.className = 'message success';
+                        messageAlert.textContent = '✓ Thank you! Your feedback has been sent successfully.';
+                        form.reset();
+                        document.getElementById('subjectCount').textContent = '0/100';
+                        document.getElementById('messageCount').textContent = '0/1000';
+                    } else {
+                        messageAlert.className = 'message error';
+                        messageAlert.textContent = '✕ ' + (data.error || 'Error submitting feedback');
+                    }
+                })
+                .catch(err => {
+                    messageAlert.className = 'message error';
+                    messageAlert.textContent = '✕ Error submitting feedback. Please try again.';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '📤 Submit Feedback';
+                });
+            });
+        });
+
+        function resetForm() {
+            document.getElementById('subjectCount').textContent = '0/100';
+            document.getElementById('messageCount').textContent = '0/1000';
+        }
+    </script>
+</body>
+</html>

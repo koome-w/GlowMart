@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile - GlowMart</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--admin-primary);
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-header h1 {
+            color: var(--admin-dark);
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .profile-header p {
+            color: #888;
+            font-size: 1em;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-item {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #888;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: var(--admin-dark);
+            font-size: 1.05em;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--admin-primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #ff3b3b;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: var(--admin-dark);
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #eee;
+            border-color: var(--admin-primary);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--admin-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">GM</span>
+                <span class="logo-text">GlowMart</span>
+            </div>
+            <div class="sidebar-adminlabel">
+                <span class="admin-label">Admin</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li><a href="dashboard.html#products"><i class="fa fa-box"></i> Products</a></li>
+                <li><a href="dashboard.html#categories"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="dashboard.html#orders"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="dashboard.html#payments"><i class="fa fa-credit-card"></i> Payments</a></li>
+                <li><a href="dashboard.html#feedback"><i class="fa fa-comments"></i> Feedback</a></li>
+                <li><a href="dashboard.html#reports"><i class="fa fa-file"></i> Reports</a></li>
+                <li><a href="profile.html" class="active"><i class="fa fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="admin-main">
+            <!-- HEADER -->
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <h1>My Profile</h1>
+                </div>
+                <div class="admin-header-right">
+                    <div class="admin-info">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <div class="admin-details">
+                            <span class="admin-name">Admin Name</span>
+                        </div>
+                        <button class="admin-menu-btn" title="Account Options" id="adminMenuToggle"><i class="fa fa-ellipsis-v"></i></button>
+                        
+                        <!-- Admin Profile Dropdown Menu -->
+                        <div class="admin-dropdown-menu" id="adminDropdownMenu">
+                            <div class="dropdown-header">My Account</div>
+                            <a href="profile.html" class="dropdown-item" title="View your profile">
+                                <i class="fa fa-user"></i> View Profile
+                            </a>
+                            <a href="edit-profile.html" class="dropdown-item" title="Edit your information">
+                                <i class="fa fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="settings.html" class="dropdown-item" title="Account settings">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../php/logout.php" class="dropdown-item logout-item" title="Sign out">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                <a href="dashboard.html" class="back-button"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+
+                <div class="profile-container" id="profileContainer">
+                    <div class="loading">
+                        <i class="fa fa-spinner fa-spin"></i> Loading profile...
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../javascript/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load profile data
+            fetch('../php/profile_api.php?action=get')
+                .then(res => res.json())
+                .then(data => {
+                    const profileImg = data.profile_pic ? `../../${data.profile_pic}` : 'https://via.placeholder.com/120?text=No+Image';
+                    
+                    document.querySelector('.profile-container').innerHTML = `
+                        <img src="${profileImg}" alt="Profile" class="profile-avatar" onerror="this.src='https://via.placeholder.com/120?text=Profile'">
+                        <div class="profile-header">
+                            <h1>${data.full_name || 'Not Set'}</h1>
+                            <p>Administrator Account</p>
+                        </div>
+                        <div class="profile-info">
+                            <div class="info-item">
+                                <div class="info-label">Username</div>
+                                <div class="info-value">${data.username || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Full Name</div>
+                                <div class="info-value">${data.full_name || 'Not Set'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Email Address</div>
+                                <div class="info-value">${data.email || 'Not Set'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Phone Number</div>
+                                <div class="info-value">${data.phone || 'Not Set'}</div>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="edit-profile.html" class="btn btn-primary">
+                                <i class="fa fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="settings.html" class="btn btn-secondary">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    `;
+
+                    // Update admin name in header
+                    document.querySelector('.admin-name').textContent = data.full_name || 'Admin';
+                })
+                .catch(err => {
+                    document.querySelector('.profile-container').innerHTML = `
+                        <div class="loading" style="color: #d32f2f;">
+                            <i class="fa fa-exclamation-circle"></i> Error loading profile
+                        </div>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>

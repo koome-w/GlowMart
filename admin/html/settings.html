@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - GlowMart</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .settings-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .settings-section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--admin-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--admin-primary);
+        }
+
+        .section-description {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #888;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .strength-weak {
+            color: #d32f2f;
+        }
+
+        .strength-medium {
+            color: #f57c00;
+        }
+
+        .strength-strong {
+            color: #388e3c;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--admin-primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ff3b3b;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: var(--admin-dark);
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #eee;
+            border-color: var(--admin-primary);
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffcdd2;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+            display: block;
+        }
+
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .settings-item-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--admin-dark);
+            font-weight: 600;
+        }
+
+        .settings-item-info p {
+            margin: 0;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--admin-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        .toggle-password {
+            position: relative;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.1em;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">GM</span>
+                <span class="logo-text">GlowMart</span>
+            </div>
+            <div class="sidebar-adminlabel">
+                <span class="admin-label">Admin</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li><a href="dashboard.html#products"><i class="fa fa-box"></i> Products</a></li>
+                <li><a href="dashboard.html#categories"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="dashboard.html#orders"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="dashboard.html#payments"><i class="fa fa-credit-card"></i> Payments</a></li>
+                <li><a href="dashboard.html#feedback"><i class="fa fa-comments"></i> Feedback</a></li>
+                <li><a href="dashboard.html#reports"><i class="fa fa-file"></i> Reports</a></li>
+                <li><a href="profile.html" class="active"><i class="fa fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="admin-main">
+            <!-- HEADER -->
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <h1>Settings</h1>
+                </div>
+                <div class="admin-header-right">
+                    <div class="admin-info">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <div class="admin-details">
+                            <span class="admin-name">Admin Name</span>
+                        </div>
+                        <button class="admin-menu-btn" title="Account Options" id="adminMenuToggle"><i class="fa fa-ellipsis-v"></i></button>
+                        
+                        <!-- Admin Profile Dropdown Menu -->
+                        <div class="admin-dropdown-menu" id="adminDropdownMenu">
+                            <div class="dropdown-header">My Account</div>
+                            <a href="profile.html" class="dropdown-item" title="View your profile">
+                                <i class="fa fa-user"></i> View Profile
+                            </a>
+                            <a href="edit-profile.html" class="dropdown-item" title="Edit your information">
+                                <i class="fa fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="settings.html" class="dropdown-item" title="Account settings">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../php/logout.php" class="dropdown-item logout-item" title="Sign out">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                <a href="profile.html" class="back-button"><i class="fa fa-arrow-left"></i> Back to Profile</a>
+
+                <div class="settings-container">
+                    <!-- Change Password Section -->
+                    <div class="settings-section">
+                        <h2 class="section-title">
+                            <i class="fa fa-lock"></i> Change Password
+                        </h2>
+                        <p class="section-description">Update your password to keep your account secure</p>
+
+                        <div id="passwordMessage" class="message"></div>
+
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="currentPassword" name="current_password" required>
+                                    <button type="button" class="toggle-password-btn" title="Show/Hide">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="newPassword" name="new_password" required>
+                                    <button type="button" class="toggle-password-btn" title="Show/Hide">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="strengthIndicator" class="password-strength"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="confirmPassword" name="confirm_password" required>
+                                    <button type="button" class="toggle-password-btn" title="Show/Hide">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="passwordSubmitBtn">
+                                    <i class="fa fa-lock"></i> Update Password
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="fa fa-times"></i> Clear
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Account Security Section -->
+                    <div class="settings-section">
+                        <h2 class="section-title">
+                            <i class="fa fa-shield"></i> Account Security
+                        </h2>
+                        <p class="section-description">Monitor your account activity and security settings</p>
+
+                        <div class="settings-list">
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <h4>Active Sessions</h4>
+                                    <p>Manage your active login sessions</p>
+                                </div>
+                                <i class="fa fa-check" style="color: #388e3c; font-size: 1.2em;"></i>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <h4>Last Login</h4>
+                                    <p id="lastLogin">Loading...</p>
+                                </div>
+                                <i class="fa fa-clock" style="color: var(--admin-primary); font-size: 1.2em;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone -->
+                    <div class="settings-section" style="border-left: 4px solid #d32f2f;">
+                        <h2 class="section-title" style="color: #d32f2f;">
+                            <i class="fa fa-exclamation-triangle"></i> Danger Zone
+                        </h2>
+                        <p class="section-description">Irreversible actions</p>
+                        <a href="../php/logout.php" class="btn btn-secondary" style="background: #ffcdd2; color: #c62828; border-color: #d32f2f;">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../javascript/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordForm = document.getElementById('passwordForm');
+            const passwordMessage = document.getElementById('passwordMessage');
+            const newPassword = document.getElementById('newPassword');
+            const strengthIndicator = document.getElementById('strengthIndicator');
+            const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
+            const toggleButtons = document.querySelectorAll('.toggle-password-btn');
+
+            // Load admin info
+            fetch('../php/profile_api.php?action=get')
+                .then(res => res.json())
+                .then(data => {
+                    document.querySelector('.admin-name').textContent = data.full_name || 'Admin';
+                    document.getElementById('lastLogin').textContent = 'Today at ' + new Date().toLocaleTimeString();
+                });
+
+            // Password strength indicator
+            newPassword.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 'Weak';
+                let strengthClass = 'strength-weak';
+
+                if (password.length >= 8) {
+                    if (/[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) {
+                        strength = 'Strong';
+                        strengthClass = 'strength-strong';
+                    } else if (/[A-Z]/.test(password) || /[0-9]/.test(password)) {
+                        strength = 'Medium';
+                        strengthClass = 'strength-medium';
+                    }
+                }
+
+                strengthIndicator.textContent = 'Strength: ' + strength;
+                strengthIndicator.className = 'password-strength ' + strengthClass;
+            });
+
+            // Toggle password visibility
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const input = this.previousElementSibling || this.parentElement.querySelector('input');
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+
+            // Handle password form submission
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const newPass = document.getElementById('newPassword').value;
+                const confirmPass = document.getElementById('confirmPassword').value;
+
+                if (newPass !== confirmPass) {
+                    passwordMessage.className = 'message error';
+                    passwordMessage.innerHTML = '<i class="fa fa-exclamation-circle"></i> Passwords do not match!';
+                    return;
+                }
+
+                if (newPass.length < 6) {
+                    passwordMessage.className = 'message error';
+                    passwordMessage.innerHTML = '<i class="fa fa-exclamation-circle"></i> Password must be at least 6 characters long!';
+                    return;
+                }
+
+                passwordSubmitBtn.disabled = true;
+                passwordSubmitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Updating...';
+
+                const formData = new FormData();
+                formData.append('action', 'change_password');
+                formData.append('current_password', document.getElementById('currentPassword').value);
+                formData.append('new_password', newPass);
+
+                fetch('../php/profile_api.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        passwordMessage.className = 'message success';
+                        passwordMessage.innerHTML = '<i class="fa fa-check-circle"></i> Password updated successfully!';
+                        passwordForm.reset();
+                        strengthIndicator.textContent = '';
+                    } else {
+                        passwordMessage.className = 'message error';
+                        passwordMessage.innerHTML = '<i class="fa fa-exclamation-circle"></i> ' + (data.error || 'Error updating password. Please try again.');
+                    }
+                })
+                .catch(err => {
+                    passwordMessage.className = 'message error';
+                    passwordMessage.innerHTML = '<i class="fa fa-exclamation-circle"></i> Error updating password. Please try again.';
+                })
+                .finally(() => {
+                    passwordSubmitBtn.disabled = false;
+                    passwordSubmitBtn.innerHTML = '<i class="fa fa-lock"></i> Update Password';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

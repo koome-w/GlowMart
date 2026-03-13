@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - GlowMart</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0px auto;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            padding: 30px;
+            color: #fff;
+        }
+
+        .form-header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .form-content {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            color: #888;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+            border-left: 4px solid;
+        }
+
+        .message.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border-color: #2e7d32;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffcdd2;
+            color: #c62828;
+            border-color: #c62828;
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f0f0f0;
+            border-top-color: #ff6b6b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="../html/menu.html" class="nav-brand">
+                <div class="logo-icon">GM</div>
+                <span class="logo-text">GlowMart</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="profile.html" class="back-link">← Back to Profile</a>
+
+        <div class="form-card">
+            <!-- Header -->
+            <div class="form-header">
+                <h1>Edit Your Profile</h1>
+                <p>Keep your information up to date</p>
+            </div>
+
+            <!-- Content -->
+            <div class="form-content">
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px;">Loading profile...</p>
+                </div>
+
+                <div id="formData" style="display: none;">
+                    <div id="messageAlert" class="message"></div>
+
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                💾 Save Changes
+                            </button>
+                            <a href="profile.html" class="btn btn-secondary">✕ Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../javascript/menu.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editForm = document.getElementById('editForm');
+            const messageAlert = document.getElementById('messageAlert');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Load profile data
+            fetch('../php/fetch_user_profile.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.fullname) {
+                        document.getElementById('fullname').value = data.fullname;
+                        document.getElementById('email').value = data.email || '';
+
+                        document.getElementById('loadingState').style.display = 'none';
+                        document.getElementById('formData').style.display = 'block';
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('loadingState').innerHTML = '<p style="color: #d32f2f;">Error loading profile</p>';
+                });
+
+            // Handle form submission
+            editForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Saving...';
+
+                const formData = new FormData(this);
+
+                fetch('../php/update_user_profile.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        messageAlert.className = 'message success';
+                        messageAlert.textContent = '✓ Profile updated successfully!';
+                        setTimeout(() => {
+                            window.location.href = 'profile.html';
+                        }, 1500);
+                    } else {
+                        messageAlert.className = 'message error';
+                        messageAlert.textContent = '✕ ' + (data.error || 'Error updating profile');
+                    }
+                })
+                .catch(err => {
+                    messageAlert.className = 'message error';
+                    messageAlert.textContent = '✕ Error updating profile';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '💾 Save Changes';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

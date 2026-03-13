@@ -1,3 +1,49 @@
+// ===== USER DROPDOWN MENU =====
+document.addEventListener('DOMContentLoaded', function() {
+    const userMenuToggle = document.getElementById('userMenuToggle');
+    const userDropdownMenu = document.getElementById('userDropdownMenu');
+
+    if (userMenuToggle && userDropdownMenu) {
+        // Toggle dropdown on button click
+        userMenuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdownMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking on a link
+        const dropdownLinks = userDropdownMenu.querySelectorAll('.dropdown-item');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                userDropdownMenu.classList.remove('active');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenuToggle.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+                userDropdownMenu.classList.remove('active');
+            }
+        });
+    }
+
+    // Load user data
+    loadUserData();
+});
+
+function loadUserData() {
+    fetch('../php/fetch_user_profile.php')
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.fullname && data.email) {
+                const userNameEl = document.querySelector('.user-name');
+                const userEmailEl = document.querySelector('.user-email');
+                if (userNameEl) userNameEl.textContent = data.fullname;
+                if (userEmailEl) userEmailEl.textContent = data.email;
+            }
+        })
+        .catch(err => console.error('Error loading user data:', err));
+}
+
 // Open/Close side nav
 function openNav() {
     document.getElementById("sideNav").style.width = "250px";

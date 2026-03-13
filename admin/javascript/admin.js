@@ -1,6 +1,26 @@
+// ========== 0. LOAD ADMIN NAME ==========
+function loadAdminName() {
+    const adminNameElements = document.querySelectorAll('.admin-name');
+    if (adminNameElements.length > 0) {
+        fetch('../php/profile_api.php?action=get')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.full_name) {
+                    adminNameElements.forEach(el => {
+                        el.textContent = data.full_name;
+                    });
+                }
+            })
+            .catch(err => console.error('Error loading admin name:', err));
+    }
+}
+
 // ========== 1. DASHBOARD ==========
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Load admin name
+    loadAdminName();
+
     fetch('../php/dashboard_data.php')
         .then(res => res.json())
         .then(data => {
@@ -340,7 +360,7 @@ function loadOrderTable() {
             Object.keys(orderMap).forEach(k => delete orderMap[k]);
 
             if (!Array.isArray(orders) || orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#888;">No orders found.</td></tr>';
                 return;
             }
 
@@ -357,6 +377,7 @@ function loadOrderTable() {
                         <td>KES ${parseFloat(order.total_amount).toFixed(2)}</td>
                         <td>${order.status}</td>
                         <td>${order.created_at ? order.created_at.split(' ')[0] : ''}</td>
+                        <td>${order.delivery_date || ''}</td>
                         <td>
                             <button class="action-btn" onclick="openOrderStatusModal(${order.order_id})" title="Update Status"><i class="fa fa-edit"></i></button>
                         </td>
@@ -419,28 +440,32 @@ loadOrderTable();
 // ========== 5. PAYMENT MANAGEMENT ==========
 
 function loadPaymentTable() {
-    fetch('payments_api.php?action=list')
+    fetch('../php/payments_api.php?action=list')
         .then(res => res.json())
         .then(payments => {
             const tbody = document.getElementById('paymentTableBody');
             tbody.innerHTML = '';
-            if (payments.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No payments found.</td></tr>';
+
+            if (!Array.isArray(payments) || payments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;">No payments found.</td></tr>';
                 return;
             }
+
             payments.forEach(pay => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${pay.receipt_id}</td>
+                        <td>${pay.id}</td>
                         <td>${pay.order_id}</td>
-                        <td>${pay.payment_method}</td>
+                        <td>${pay.phone ?? '-'}</td>
                         <td>KES ${parseFloat(pay.amount).toFixed(2)}</td>
+                        <td>${pay.mpesa_receipt ?? '-'}</td>
                         <td>${pay.status}</td>
-                        <td>${pay.payment_date ? pay.payment_date.split(' ')[0] : ''}</td>
+                        <td>${pay.created_at ? pay.created_at.split(' ')[0] : '-'}</td>
                     </tr>
                 `;
             });
-        });
+        })
+        .catch(err => console.error('Payment load error:', err));
 }
 
 
@@ -474,7 +499,7 @@ function loadFeedbackTable() {
 // ========== 7. REPORTS ==========
 
 function loadReportsTable() {
-    fetch('reports_api.php?action=sales')
+    fetch('../php/reports_api.php?action=sales')
         .then(res => res.json())
         .then(orders => {
             const tbody = document.getElementById('reportsTableBody');
@@ -486,13 +511,14 @@ function loadReportsTable() {
             orders.forEach(order => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${order.order_id}</td>
-                        <td>${order.username || ''}</td>
-                        <td>${order.product_name || ''}</td>
-                        <td>${order.quantity}</td>
-                        <td>KES ${parseFloat(order.total).toFixed(2)}</td>
+                         <td>${order.order_id}</td>
+                        <td>${order.fullname ?? '-'}</td>
+                        <td>${order.product_name ?? '-'}</td>
+                        <td>${order.quantity ?? '-'}</td>
+                        <td>KES ${order.price ? parseFloat(order.price).toFixed(2) : '-'}</td>
+                        <td>KES ${parseFloat(order.total_amount).toFixed(2)}</td>
                         <td>${order.status}</td>
-                        <td>${order.order_date ? order.order_date.split(' ')[0] : ''}</td>
+                        <td>${order.created_at ? order.created_at.split(' ')[0] : '-'}</td>
                     </tr>
                 `;
             });
@@ -500,11 +526,11 @@ function loadReportsTable() {
 }
 
 function downloadSalesCSV() {
-    window.open('reports_api.php?action=sales_csv', '_blank');
+    window.open('../php/reports_api.php?action=sales_csv', '_blank');
 }
 
 function downloadSalesPDF() {
-    window.open('reports_api.php?action=sales_pdf', '_blank');
+    window.open('../php/reports_api.php?action=sales_pdf', '_blank');
 }
 
 
@@ -530,6 +556,32 @@ function loadAdminProfile() {
 // ========== 9. DOMContentLoaded — ALL EVENT BINDINGS ==========
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    // --- Admin Menu Dropdown ---
+    const adminMenuToggle = document.getElementById('adminMenuToggle');
+    const adminDropdownMenu = document.getElementById('adminDropdownMenu');
+
+    if (adminMenuToggle && adminDropdownMenu) {
+        adminMenuToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            adminDropdownMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking on a link
+        const dropdownLinks = adminDropdownMenu.querySelectorAll('.dropdown-item');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                adminDropdownMenu.classList.remove('active');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!adminMenuToggle.contains(e.target) && !adminDropdownMenu.contains(e.target)) {
+                adminDropdownMenu.classList.remove('active');
+            }
+        });
+    }
 
     // --- Products ---
     loadCategories('categoryFilter');

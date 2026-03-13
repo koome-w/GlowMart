@@ -19,7 +19,18 @@ if ($action === 'list') {
          GROUP BY o.order_id, o.total_amount, o.status, o.created_at, u.fullname
          ORDER BY o.order_id DESC"
     );
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Calculate delivery date for each order (3-4 days after creation)
+    foreach ($orders as &$order) {
+        if ($order['created_at']) {
+            $created = new DateTime($order['created_at']);
+            $created->add(new DateInterval('P3D')); // Add 3 days
+            $order['delivery_date'] = $created->format('Y-m-d');
+        }
+    }
+    
+    echo json_encode($orders);
     exit;
 }
 

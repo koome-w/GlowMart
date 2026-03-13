@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - GlowMart</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: var(--admin-dark);
+            margin-bottom: 10px;
+            font-size: 1.6em;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #888;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--admin-primary);
+            display: block;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 16px;
+            background: var(--admin-primary);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .file-input-label:hover {
+            background: #ff3b3b;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--admin-primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ff3b3b;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: var(--admin-dark);
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #eee;
+            border-color: var(--admin-primary);
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffcdd2;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+            display: block;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--admin-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">GM</span>
+                <span class="logo-text">GlowMart</span>
+            </div>
+            <div class="sidebar-adminlabel">
+                <span class="admin-label">Admin</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li><a href="dashboard.html#products"><i class="fa fa-box"></i> Products</a></li>
+                <li><a href="dashboard.html#categories"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="dashboard.html#orders"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="dashboard.html#payments"><i class="fa fa-credit-card"></i> Payments</a></li>
+                <li><a href="dashboard.html#feedback"><i class="fa fa-comments"></i> Feedback</a></li>
+                <li><a href="dashboard.html#reports"><i class="fa fa-file"></i> Reports</a></li>
+                <li><a href="profile.html" class="active"><i class="fa fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="admin-main">
+            <!-- HEADER -->
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <h1>Edit Profile</h1>
+                </div>
+                <div class="admin-header-right">
+                    <div class="admin-info">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <div class="admin-details">
+                            <span class="admin-name">Admin Name</span>
+                        </div>
+                        <button class="admin-menu-btn" title="Account Options" id="adminMenuToggle"><i class="fa fa-ellipsis-v"></i></button>
+                        
+                        <!-- Admin Profile Dropdown Menu -->
+                        <div class="admin-dropdown-menu" id="adminDropdownMenu">
+                            <div class="dropdown-header">My Account</div>
+                            <a href="profile.html" class="dropdown-item" title="View your profile">
+                                <i class="fa fa-user"></i> View Profile
+                            </a>
+                            <a href="edit-profile.html" class="dropdown-item" title="Edit your information">
+                                <i class="fa fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="settings.html" class="dropdown-item" title="Account settings">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../php/logout.php" class="dropdown-item logout-item" title="Sign out">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                <a href="profile.html" class="back-button"><i class="fa fa-arrow-left"></i> Back to Profile</a>
+
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>Update Your Information</h2>
+                        <p style="color: #888;">Keep your profile up to date</p>
+                    </div>
+
+                    <div id="messageAlert" class="message"></div>
+
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-group avatar-upload">
+                            <label>Profile Picture</label>
+                            <img id="avatarPreview" src="https://via.placeholder.com/120?text=Profile" alt="Avatar Preview" class="avatar-preview">
+                            <div class="file-input-wrapper">
+                                <input type="file" id="profilePic" name="admin_profile_pic" accept="image/*">
+                                <label for="profilePic" class="file-input-label">
+                                    <i class="fa fa-upload"></i> Choose Image
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="admin_full_name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="admin_email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="admin_phone">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fa fa-save"></i> Save Changes
+                            </button>
+                            <a href="profile.html" class="btn btn-secondary">
+                                <i class="fa fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../javascript/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileForm = document.getElementById('profileForm');
+            const messageAlert = document.getElementById('messageAlert');
+            const profilePicInput = document.getElementById('profilePic');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Load profile data
+            fetch('../php/profile_api.php?action=get')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('fullName').value = data.full_name || '';
+                    document.getElementById('email').value = data.email || '';
+                    document.getElementById('phone').value = data.phone || '';
+                    
+                    if (data.profile_pic) {
+                        avatarPreview.src = `../../${data.profile_pic}`;
+                    }
+
+                    // Update admin name in header
+                    document.querySelector('.admin-name').textContent = data.full_name || 'Admin';
+                });
+
+            // Handle image preview
+            profilePicInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        avatarPreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Handle form submission
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+                const formData = new FormData(this);
+                formData.append('action', 'update');
+
+                fetch('../php/profile_api.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    messageAlert.className = 'message success';
+                    messageAlert.innerHTML = '<i class="fa fa-check-circle"></i> Profile updated successfully!';
+                    
+                    setTimeout(() => {
+                        messageAlert.style.display = 'none';
+                    }, 3000);
+
+                    // Update admin name in header
+                    const fullName = document.getElementById('fullName').value;
+                    document.querySelector('.admin-name').textContent = fullName || 'Admin';
+                })
+                .catch(err => {
+                    messageAlert.className = 'message error';
+                    messageAlert.innerHTML = '<i class="fa fa-exclamation-circle"></i> Error updating profile. Please try again.';
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa fa-save"></i> Save Changes';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
