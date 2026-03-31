@@ -261,7 +261,9 @@
                         document.getElementById('fullname').value = data.fullname;
                         document.getElementById('email').value = data.email || '';
 
-                        document.getElementById('loadingState').style.display = 'none';
+                        setTimeout(() => {
+  document.getElementById('loadingState').style.display = 'none';
+}, 1000); // 3000ms = 3 seconds
                         document.getElementById('formData').style.display = 'block';
                     }
                 })

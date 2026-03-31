@@ -306,7 +306,7 @@
                             <td><strong>#${order.order_id}</strong></td>
                             <td>${order.order_date ? order.order_date.split(' ')[0] : '-'}</td>
                             <td>${order.products || '-'}</td>
-                            <td><strong>KES ${parseFloat(order.total_price).toFixed(2)}</strong></td>
+                            <td><strong>KES ${parseFloat(order.total_amount).toFixed(2)}</strong></td>
                             <td>${order.delivery_date ? order.delivery_date.split(' ')[0] : '-'}</td>
                             <td><span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></td>
                             <td>
