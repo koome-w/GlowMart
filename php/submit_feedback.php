@@ -17,6 +17,7 @@ try {
     $message       = isset($_POST['message'])      ? trim($_POST['message'])      : null;
     $email         = isset($_POST['email'])        ? trim($_POST['email'])        : null;
 
+    // ✅ Validation
     if (empty($feedback_type)) {
         throw new Exception('Please select a feedback type');
     }
@@ -36,36 +37,37 @@ try {
         throw new Exception('Invalid email address');
     }
 
-    $pdo->exec('
-        CREATE TABLE IF NOT EXISTS feedback (
-            feedback_id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            feedback_type VARCHAR(50) NOT NULL,
-            subject VARCHAR(100) NOT NULL,
-            message TEXT NOT NULL,
-            email VARCHAR(100),
-            status VARCHAR(20) DEFAULT "new",
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-        )
-    ');
+    
+    // ✅ Insert using named parameters
+    $stmt = $pdo->prepare("
+        INSERT INTO feedbacks (user_id, feedback_type, subject, feedback_text, feedback_date, email)
+        VALUES (:user_id, :feedback_type, :subject, :feedback_text, :feedback_date, :email)
+    ");
 
-    $stmt = $pdo->prepare('
-        INSERT INTO feedback (user_id, feedback_type, subject, message, email)
-        VALUES (?, ?, ?, ?, ?)
-    ');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':feedback_type', $feedback_type, PDO::PARAM_STR);
+    $stmt->bindValue(':subject', $subject, PDO::PARAM_STR);
+    $stmt->bindValue(':feedback_text', $message, PDO::PARAM_STR);
+    $stmt->bindValue(':feedback_date', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 
-    $stmt->execute([
-        $user_id,
-        $feedback_type,
-        $subject,
-        $message,
-        !empty($email) ? $email : null
+    if (!empty($email)) {
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    } else {
+        $stmt->bindValue(':email', null, PDO::PARAM_NULL);
+    }
+
+    $stmt->execute();
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Thank you for your feedback!'
     ]);
-
-    echo json_encode(['success' => true, 'message' => 'Thank you for your feedback!']);
 
 } catch (Exception $e) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
+?>

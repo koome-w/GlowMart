@@ -396,7 +396,7 @@
                             <div class="review-header">
                                 <div>
                                     <div class="review-product">${review.product_name}</div>
-                                    <div class="review-date">${new Date(review.created_at).toLocaleDateString()}</div>
+                                    <div class="review-date">${new Date(review.review_date).toLocaleDateString()}</div>
                                 </div>
                             </div>
                             <div class="review-rating">
@@ -420,10 +420,13 @@
                 .then(res => res.json())
                 .then(data => {
                     const orders = data.orders || [];
+                    console.log(data.orders[0]);
                     if (orders.length > 0) {
                         const productSelect = document.getElementById('product');
                         const options = orders.map(order => `
-                            <option value="${order.order_id}-${order.order_id}">${order.products || 'Order ' + order.order_id}</option>
+                            <option value="${order.order_id}-${order.order_id}">
+                                ${order.products} (Order #${order.order_id})
+                            </option>
                         `).join('');
                         productSelect.innerHTML = '<option value="">Choose a product from your orders...</option>' + options;
                     }

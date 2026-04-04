@@ -63,12 +63,16 @@ fetch("../php/fetch_products.php")
     const categories = ["All", ...new Set(data.map(p => p.category_name))];
 
     // Build horizontal category buttons
-    categoryScroll.innerHTML = categories.map(cat => `
-        <button class="category-btn" onclick="filterCategory('${cat}')">${cat}</button>
-    `).join('');
+    if (categoryScroll) {
+        categoryScroll.innerHTML = categories.map(cat => `
+            <button class="category-btn" onclick="filterCategory('${cat}')">${cat}</button>
+        `).join('');
+    }
 
     // Display all products initially
-    displayProducts(data);
+    if (container) {
+        displayProducts(data);
+    }
 
     // Filter function
     window.filterCategory = function(category) {
@@ -139,7 +143,10 @@ async function updateCartCount() {
     try {
         const res = await fetch('../php/cart_count.php');
         const data = await res.json();
-        document.getElementById('cart-count').textContent = data.count || 0;
+        const cartCountElem = document.getElementById('cart-count');
+        if (cartCountElem) {
+            cartCountElem.textContent = data.count || 0;
+        }
     } catch(err) {
         console.error(err);
     }

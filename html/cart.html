@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GlowMart Cart</title>
     <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/cart.css">
     
 </head>
@@ -26,7 +27,7 @@
         </nav>
 
         <div class="nav-actions">
-            <a href="../html/cart.html">
+                <a href="../html/cart.html">
                 <button class="cart-btn" aria-label="Shopping cart">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -35,22 +36,65 @@
                     </svg>
                     <span id="cart-count" class="cart-count">0</span>
                 </button>
-            </a>
-            <a href="../html/profile.html">
-                <button class="user-btn" aria-label="User account">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+                </a>
+                
+                <!-- User Dropdown Menu -->
+                <div class="user-dropdown-wrapper">
+                    <button class="user-btn" id="userMenuToggle" aria-label="User account">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                    
+                    <!-- User Dropdown Menu -->
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <div class="dropdown-header">
+                            <div class="user-avatar">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name">User</div>
+                                <div class="user-email">user@example.com</div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="../user/profile.html" class="dropdown-item" title="View your profile">
+                            <i class="icon-user"></i> My Profile
+                        </a>
+                        <a href="../user/edit-profile.html" class="dropdown-item" title="Edit your information">
+                            <i class="icon-edit"></i> Edit Profile
+                        </a>
+                        <a href="../user/order-history.html" class="dropdown-item" title="View your orders">
+                            <i class="icon-orders"></i> Order History
+                        </a>
+                        <a href="../user/reviews.html" class="dropdown-item" title="Manage reviews">
+                            <i class="icon-star"></i> My Reviews
+                        </a>
+                        <a href="../user/feedback.html" class="dropdown-item" title="Send feedback">
+                            <i class="icon-feedback"></i> Feedback
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="../php/logout.php" class="dropdown-item logout-item" title="Sign out">
+                            <i class="icon-logout"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
-            </a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            </div>
         </div>
-    </div>
 </header>
 
 <main>

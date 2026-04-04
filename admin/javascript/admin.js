@@ -472,29 +472,32 @@ function loadPaymentTable() {
 // ========== 6. FEEDBACK MANAGEMENT ==========
 
 function loadFeedbackTable() {
-    fetch('feedback_api.php?action=list')
+    fetch('../php/feedback_api.php?action=list')
         .then(res => res.json())
-        .then(feedbacks => {
+        .then(data => {
+            const feedbacks = data.data || [];
             const tbody = document.getElementById('feedbackTableBody');
             tbody.innerHTML = '';
+
             if (feedbacks.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No feedback found.</td></tr>';
                 return;
             }
+
             feedbacks.forEach(fb => {
                 tbody.innerHTML += `
                     <tr>
                         <td>${fb.feedback_id}</td>
-                        <td>${fb.username || ''}</td>
-                        <td>${fb.message}</td>
-                        <td>${fb.rating ? fb.rating + ' / 5' : ''}</td>
-                        <td>${fb.created_at ? fb.created_at.split(' ')[0] : ''}</td>
+                        <td>${fb.fullname || ''}</td>
+                        <td>${fb.feedback_text}</td>
+                        <td>${fb.feedback_type}</td>
+                        <td>${fb.feedback_date.split(' ')[0]}</td>
                     </tr>
                 `;
             });
-        });
+        })
+        .catch(err => console.error('Fetch error:', err));
 }
-
 
 // ========== 7. REPORTS ==========
 

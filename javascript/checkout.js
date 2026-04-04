@@ -4,6 +4,46 @@ document.addEventListener('DOMContentLoaded', function(){
     const phoneInput = document.getElementById('phone');
     const status = document.getElementById('status');
 
+    let intasend;
+    let currentOrderId = null;
+
+    // Initialize IntaSend
+    intasend = new window.IntaSend({
+        publicAPIKey: "ISPubKey_test_5814b9ff-2601-473f-b646-8a9d219db264",
+        live: false
+    })
+    .on("COMPLETE", async (results) => {
+        console.log("Payment complete", results);
+        status.textContent = 'Payment successful! Updating order...';
+        // Update order status
+        try {
+            const res = await fetch('../php/update_order_status.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order_id: currentOrderId, status: 'paid', transaction_id: results.id})
+            });
+            const data = await res.json();
+            if(data.status === 'success'){
+                status.textContent = 'Order completed successfully!';
+                // Redirect or show success
+                setTimeout(() => window.location.href = '../html/menu.html', 2000);
+            } else {
+                status.textContent = 'Order update failed: ' + data.message;
+            }
+        } catch(err) {
+            status.textContent = 'Error updating order: ' + err.message;
+        }
+    })
+    .on("FAILED", (results) => {
+        console.log("Payment failed", results);
+        status.textContent = 'Payment failed. Please try again.';
+        payBtn.disabled = false;
+    })
+    .on("IN-PROGRESS", (results) => {
+        console.log("Payment in progress", results);
+        status.textContent = 'Processing payment...';
+    });
+
     async function loadCart(){
         cartSummary.textContent = 'Loading cart...';
         try{
@@ -50,23 +90,22 @@ document.addEventListener('DOMContentLoaded', function(){
                 return;
             }
 
-            const orderId = orderData.order_id;
-            status.textContent = 'Order created (ID: '+orderId+'). Initiating M-Pesa...';
+            currentOrderId = orderData.order_id;
+            status.textContent = 'Order created (ID: '+currentOrderId+'). Initiating payment...';
 
-            // 2) Initiate M-Pesa STK Push
-            const mpesaRes = await fetch('../php/initiate_payment.php', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({order_id: orderId, phone})
+            // Get total from cart
+            const cartRes = await fetch('../php/fetch_cart.php');
+            const cartData = await cartRes.json();
+            let total = 0;
+            cartData.forEach(item => total += item.price * item.quantity);
+
+            // 2) Initiate IntaSend payment
+            intasend.run({
+                amount: total,
+                currency: 'KES',
+                phone_number: phone,
+                api_ref: 'order_' + currentOrderId // optional reference
             });
-
-            const mpesaData = await mpesaRes.json();
-            if(mpesaData.status === 'success'){
-                status.textContent = 'STK Push sent. Check your phone to complete payment.';
-            } else {
-                status.textContent = 'Payment initiation failed: ' + (mpesaData.message||mpesaData.error||'');
-                payBtn.disabled = false;
-            }
 
         }catch(err){
             status.textContent = 'Error: ' + err.message;

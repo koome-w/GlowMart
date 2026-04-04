@@ -95,3 +95,10 @@
             cursor: pointer;
             border-radius: 8px;
         }
+
+        #cart-total {
+            text-align: right;
+            font-size: 18px;
+            margin: 20px;
+            font-weight: bold;
+        }

@@ -77,10 +77,6 @@ try {
         ]);
     }
 
-    // Clear cart for the user
-    $clearStmt = $pdo->prepare('DELETE FROM cart WHERE user_id = :user_id');
-    $clearStmt->execute([':user_id' => $user_id]);
-
     // Commit transaction
     $pdo->commit();
 

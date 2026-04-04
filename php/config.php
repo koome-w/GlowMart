@@ -11,6 +11,7 @@ try {
         $password,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
+    $conn = $pdo; // For backward compatibility
 } catch (PDOException $e) {
     echo json_encode([
         "status" => "error",

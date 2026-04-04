@@ -51,7 +51,7 @@ try{
             ':status'=>$status
         ]);
 
-        // If paid, try to mark corresponding order as paid
+        // If paid, try to mark corresponding order as paid and clear cart
         if($resultCode === 0){
             // Find payment row to get order_id
             $stmt2 = $pdo->prepare('SELECT order_id FROM payments WHERE checkout_request_id = :checkout LIMIT 1');
@@ -60,6 +60,35 @@ try{
             if($row){
                 $order_id = $row['order_id'];
                 $pdo->prepare('UPDATE orders SET status = :status WHERE order_id = :order_id')->execute([':status'=>'paid',':order_id'=>$order_id]);
+
+                // Clear the cart for the user who made the order
+                $stmt3 = $pdo->prepare('SELECT user_id FROM orders WHERE order_id = :order_id LIMIT 1');
+                $stmt3->execute([':order_id'=>$order_id]);
+                $orderRow = $stmt3->fetch(PDO::FETCH_ASSOC);
+                if($orderRow){
+                    $user_id = $orderRow['user_id'];
+                    $pdo->prepare('DELETE FROM cart WHERE user_id = :user_id')->execute([':user_id'=>$user_id]);
+                }
+            }
+        } else {
+            // Payment failed, restore stock and mark order as cancelled
+            $stmt2 = $pdo->prepare('SELECT order_id FROM payments WHERE checkout_request_id = :checkout LIMIT 1');
+            $stmt2->execute([':checkout'=>$checkoutRequestId]);
+            $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+            if($row){
+                $order_id = $row['order_id'];
+                $pdo->prepare('UPDATE orders SET status = :status WHERE order_id = :order_id')->execute([':status'=>'cancelled',':order_id'=>$order_id]);
+
+                // Restore stock
+                $stmt4 = $pdo->prepare('SELECT product_id, quantity FROM order_items WHERE order_id = :order_id');
+                $stmt4->execute([':order_id'=>$order_id]);
+                $items = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+                foreach($items as $item){
+                    $pdo->prepare('UPDATE products SET quantity = quantity + :quantity WHERE product_id = :product_id')->execute([
+                        ':quantity' => $item['quantity'],
+                        ':product_id' => $item['product_id']
+                    ]);
+                }
             }
         }
     }
